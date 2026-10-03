@@ -1,0 +1,440 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Dev ❤️</title>
+<meta name="description" content="A special birthday website made with love for Dev, my best friend of more than 10 years.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,Poppins,sans-serif;
+  color:#fff;background:#080016;overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-5;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(255,72,151,.20),transparent 28%),
+    radial-gradient(circle at 85% 15%,rgba(122,75,255,.25),transparent 30%),
+    radial-gradient(circle at 50% 85%,rgba(0,210,255,.13),transparent 30%),
+    linear-gradient(135deg,#090019,#16002e 45%,#05000f);
+}
+canvas{position:fixed;inset:0;z-index:-1;pointer-events:none}
+#stars{z-index:-3}
+#particles{z-index:-2}
+
+.loader{
+  position:fixed;inset:0;z-index:1000;background:#07000f;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  transition:opacity .8s,visibility .8s;
+}
+.loader.hide{opacity:0;visibility:hidden}
+.loader-heart{font-size:70px;animation:heartbeat 1s infinite}
+.loader p{margin-top:18px;color:#e9d9ff;letter-spacing:3px;text-transform:uppercase;font-size:12px}
+.loader-bar{width:190px;height:3px;background:#29113f;border-radius:99px;margin-top:18px;overflow:hidden}
+.loader-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff4fa3,#9b6cff,#54e8ff);animation:load 1.8s ease forwards}
+
+.music{
+ position:fixed;right:20px;top:20px;z-index:20;width:48px;height:48px;border-radius:50%;
+ border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.09);
+ color:#fff;backdrop-filter:blur(12px);cursor:pointer;font-size:19px;
+ box-shadow:0 8px 30px rgba(0,0,0,.25);transition:.3s
+}
+.music:hover{transform:scale(1.08);background:rgba(255,255,255,.16)}
+
+.hero{
+ min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;
+ padding:80px 20px 60px;position:relative;
+}
+.hero-inner{max-width:1000px;animation:heroIn 1.2s ease both}
+.badge{
+ display:inline-flex;align-items:center;gap:8px;padding:10px 17px;border-radius:999px;
+ border:1px solid rgba(255,255,255,.17);background:rgba(255,255,255,.07);
+ backdrop-filter:blur(12px);color:#f6eaff;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+ box-shadow:0 0 35px rgba(190,85,255,.14)
+}
+.badge::before{content:"✦";color:#ff83bd}
+h1{
+ font-family:"Great Vibes",cursive;font-size:clamp(78px,15vw,180px);font-weight:400;
+ line-height:.9;margin:25px 0 10px;
+ background:linear-gradient(90deg,#fff,#ffb6df 35%,#c4b0ff 70%,#8cecff);
+ -webkit-background-clip:text;background-clip:text;color:transparent;
+ filter:drop-shadow(0 0 35px rgba(255,94,184,.22));
+}
+.hero-sub{font-size:clamp(17px,2.4vw,26px);color:#e5d8ef;max-width:720px;margin:0 auto;line-height:1.6}
+.hero-sub strong{color:#fff}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:35px}
+.btn{
+ border:0;padding:14px 23px;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer;
+ transition:.3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px
+}
+.btn-main{color:#1a0521;background:linear-gradient(135deg,#ff9bc9,#bca5ff);box-shadow:0 10px 35px rgba(255,101,181,.25)}
+.btn-main:hover{transform:translateY(-4px);box-shadow:0 16px 45px rgba(255,101,181,.4)}
+.btn-ghost{color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.17)}
+.btn-ghost:hover{background:rgba(255,255,255,.13);transform:translateY(-4px)}
+.scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:3px;color:#aa9ab7;text-transform:uppercase}
+.scroll span{display:block;width:1px;height:34px;background:linear-gradient(#aa9ab7,transparent);margin:8px auto 0}
+
+section{padding:100px 20px;position:relative}
+.container{max-width:1050px;margin:auto}
+.section-tag{text-align:center;color:#ff8fc5;font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:700}
+.section-title{text-align:center;font-size:clamp(34px,6vw,60px);margin:12px 0 20px;line-height:1.05}
+.section-title span{color:#ff9bc9}
+.section-intro{text-align:center;color:#bdb0c8;max-width:680px;margin:auto;line-height:1.8}
+
+.glass{
+ background:linear-gradient(135deg,rgba(255,255,255,.085),rgba(255,255,255,.025));
+ border:1px solid rgba(255,255,255,.12);box-shadow:0 25px 80px rgba(0,0,0,.25);
+ backdrop-filter:blur(18px);border-radius:28px
+}
+.story{margin-top:45px;padding:clamp(25px,5vw,55px);position:relative;overflow:hidden}
+.story::before{
+ content:"10+";position:absolute;right:-20px;top:-35px;font-size:180px;font-weight:800;
+ color:rgba(255,255,255,.025);line-height:1
+}
+.story p{color:#e6dce9;line-height:1.95;font-size:16px;margin-bottom:18px;position:relative}
+.story p:last-child{margin-bottom:0}
+.highlight{color:#ffb4d9;font-weight:700}
+
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:45px}
+.memory{padding:28px;min-height:210px;transition:.4s;position:relative;overflow:hidden}
+.memory:hover{transform:translateY(-8px);border-color:rgba(255,153,204,.3)}
+.memory .icon{font-size:35px;margin-bottom:18px}
+.memory h3{font-size:20px;margin-bottom:10px}
+.memory p{color:#bdb1c7;line-height:1.7;font-size:14px}
+.memory::after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-35px;bottom:-35px;background:rgba(255,100,180,.08);filter:blur(5px)}
+
+.timeline{margin-top:48px;position:relative}
+.timeline::before{content:"";position:absolute;left:24px;top:0;bottom:0;width:1px;background:linear-gradient(#ff86c1,#9b77ff,transparent)}
+.time-item{position:relative;padding:0 0 36px 65px}
+.dot{position:absolute;left:16px;top:4px;width:17px;height:17px;border-radius:50%;background:#ff92c7;box-shadow:0 0 0 6px rgba(255,146,199,.1),0 0 20px #ff92c7}
+.time-item h3{font-size:18px;margin-bottom:7px}
+.time-item p{color:#bdb1c7;line-height:1.7;font-size:14px}
+
+.letter-wrap{margin-top:45px}
+.letter{padding:clamp(28px,6vw,65px);position:relative}
+.letter-top{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:30px}
+.letter-top .heart{font-size:38px;animation:heartbeat 1.4s infinite}
+.letter h3{font-family:"Great Vibes";font-size:48px;font-weight:400;color:#ffb1d8}
+.letter p{font-family:Poppins,sans-serif;color:#ded3e3;line-height:2;font-size:15px;margin:0 0 20px}
+.signature{font-family:"Great Vibes";font-size:42px;color:#ff9cc9;margin-top:25px}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:none}
+
+.wishes{
+ display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:42px
+}
+.wish{padding:24px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);color:#d9cfdf;line-height:1.7}
+.wish b{color:#fff;display:block;margin-bottom:5px}
+
+.final{text-align:center;min-height:75vh;display:flex;align-items:center;justify-content:center}
+.final-box{max-width:820px}
+.big-heart{font-size:75px;display:inline-block;animation:float 3s ease-in-out infinite,heartbeat 1.6s infinite}
+.final h2{font-family:"Great Vibes";font-size:clamp(60px,10vw,105px);font-weight:400;margin:10px 0}
+.final p{color:#cfc2d7;line-height:1.8;font-size:16px}
+.footer{padding:25px;text-align:center;color:#766a80;font-size:11px;letter-spacing:1px}
+
+#burst{position:fixed;inset:0;pointer-events:none;z-index:50}
+.toast{
+ position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+ background:rgba(18,8,28,.88);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(14px);
+ padding:14px 20px;border-radius:999px;color:#fff;z-index:80;transition:.4s;font-size:13px
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.confetti{position:absolute;width:9px;height:16px;top:-20px;animation:fall linear forwards}
+.float-heart{position:fixed;bottom:-40px;font-size:18px;pointer-events:none;z-index:2;animation:rise linear forwards;opacity:.8}
+
+@keyframes load{to{width:100%}}
+@keyframes heroIn{from{opacity:0;transform:translateY(25px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.13)}30%{transform:scale(1)}}
+@keyframes float{50%{transform:translateY(-12px)}}
+@keyframes rise{to{transform:translateY(-110vh) translateX(var(--drift)) rotate(25deg);opacity:0}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:800px){
+ .memory-grid,.wishes{grid-template-columns:1fr}
+ section{padding:75px 16px}
+ .story{padding:25px}
+ .letter{padding:28px 22px}
+ .letter-top h3{font-size:40px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="loader" id="loader">
+  <div class="loader-heart">❤️</div>
+  <p>Preparing something special for Dev...</p>
+  <div class="loader-bar"><span></span></div>
+</div>
+
+<canvas id="stars"></canvas>
+<canvas id="particles"></canvas>
+<div id="burst"></div>
+<div class="toast" id="toast">Made with a whole lot of love ❤️</div>
+
+<button class="music" id="musicBtn" title="Toggle birthday music" aria-label="Toggle birthday music">♪</button>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="badge">A little surprise for my best friend</div>
+  <h1>Happy Birthday, Dev</h1>
+  <p class="hero-sub">To the person who has been part of my story for <strong>10+ unforgettable years</strong> — this little corner of the internet is just for you. ✨</p>
+  <div class="cta-row">
+   <a class="btn btn-main" href="#letter">Open Your Letter 💌</a>
+   <button class="btn btn-ghost" id="surpriseBtn">Tap for a Surprise ✨</button>
+  </div>
+ </div>
+ <div class="scroll">Scroll to begin<span></span></div>
+</header>
+
+<section id="story">
+ <div class="container">
+  <div class="section-tag">Our Story</div>
+  <h2 class="section-title">10+ Years of <span>Us</span></h2>
+  <p class="section-intro">Some friendships are measured in years. Ours is measured in memories, stupid jokes, late conversations, shared chaos, and the quiet moments when we simply knew the other person would be there.</p>
+  <div class="story glass reveal">
+   <p>Dev, when I think about how long we have been friends, it honestly feels unreal. <span class="highlight">More than ten years.</span> Ten years of growing up, changing, learning, making mistakes, laughing until our stomachs hurt, and somehow still finding our way back to the same friendship.</p>
+   <p>We have probably seen versions of each other that most people never get to see. The confident versions. The completely confused versions. The happy days, the rough days, the days where nothing made sense, and those random ordinary days that became precious memories without us even realizing it.</p>
+   <p>That is what makes this friendship special to me. It was never about being perfect. It was about being real. It was about knowing that even when life gets busy, even when conversations become less frequent, there is still a bond underneath everything that time cannot easily erase.</p>
+   <p>So today isn't just about saying “Happy Birthday.” It is about celebrating <span class="highlight">you</span> — the person, the memories, the laughter, the lessons, and the incredible journey that has brought us this far.</p>
+  </div>
+ </div>
+</section>
+
+<section>
+ <div class="container">
+  <div class="section-tag">The Good Stuff</div>
+  <h2 class="section-title">Things I'll Always <span>Remember</span></h2>
+  <div class="memory-grid">
+   <div class="memory glass reveal"><div class="icon">😂</div><h3>The Laughs</h3><p>The kind of laughter that starts from something completely stupid and somehow becomes the funniest thing in the world because we were together.</p></div>
+   <div class="memory glass reveal"><div class="icon">🌙</div><h3>The Conversations</h3><p>Those conversations that somehow started with nonsense and ended with life advice, dreams, secrets, and plans for the future.</p></div>
+   <div class="memory glass reveal"><div class="icon">🤝</div><h3>The Loyalty</h3><p>Through changing times and changing versions of ourselves, there has always been that simple feeling: “I've got your back.”</p></div>
+  </div>
+ </div>
+</section>
+
+<section>
+ <div class="container">
+  <div class="section-tag">A Little Timeline</div>
+  <h2 class="section-title">From Then <span>to Now</span></h2>
+  <div class="timeline">
+   <div class="time-item reveal"><span class="dot"></span><h3>When It All Started</h3><p>Two people became friends, probably without realizing just how many chapters were waiting ahead.</p></div>
+   <div class="time-item reveal"><span class="dot"></span><h3>The Growing-Up Years</h3><p>Life changed, we changed, but the memories kept piling up — one ridiculous moment at a time.</p></div>
+   <div class="time-item reveal"><span class="dot"></span><h3>More Than a Decade</h3><p>Ten-plus years later, this isn't just an old friendship. It is a piece of our lives that we carry forward.</p></div>
+   <div class="time-item reveal"><span class="dot"></span><h3>And Whatever Comes Next</h3><p>New places, new dreams, new responsibilities — and hopefully a lot more reasons to laugh together.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="letter">
+ <div class="container">
+  <div class="section-tag">From My Heart</div>
+  <h2 class="section-title">A Birthday <span>Letter</span></h2>
+  <div class="letter-wrap">
+   <div class="letter glass reveal">
+    <div class="letter-top"><h3>Dear Dev,</h3><div class="heart">💗</div></div>
+    
+    <p>Happy Birthday to one of the most important people I have had the privilege of calling my best friend. Today is your day, but honestly, I feel like I am the lucky one for getting to celebrate someone who has been a part of my life for more than ten years. When I look back at everything that has happened during all these years, I realize that our friendship is not just a collection of memories. It is a whole chapter of my life — a chapter filled with laughter, madness, arguments, support, unforgettable moments, and countless little things that probably meant more than we ever said out loud.</p>
+
+    <p>Ten years is a long time. People come and go, situations change, priorities change, and life takes everyone in different directions. Yet somehow, through all of that, our friendship has remained. Maybe we are not the exact same people we were when we first became friends. We have grown, learned, failed, succeeded, changed our dreams, discovered new sides of ourselves, and experienced things that the younger versions of us could never have imagined. But one thing still feels familiar: knowing that you are my friend.</p>
+
+    <p>I want you to know that I genuinely appreciate every memory we have created. I appreciate the stupid jokes that made absolutely no sense to anyone else. I appreciate the random conversations, the moments when we laughed for no reason, the times we helped each other, the days when we simply hung out, and even the arguments that somehow taught us how to understand each other better. Sometimes the smallest moments become the memories we remember the longest, and I have a feeling we have collected a lifetime of those.</p>
+
+    <p>On your birthday, I hope you realize how much potential you have. I hope you chase the things that make your heart feel alive. I hope you never become afraid of starting again, trying something new, or taking a different path. There will be difficult days — that is simply part of life — but I hope you always remember that one bad day does not define your story. Keep moving. Keep learning. Keep laughing. Keep being the person you are becoming.</p>
+
+    <p>I wish you a future filled with moments that make you stop and think, “Wow, life is actually beautiful.” I wish you success that feels meaningful, friendships that feel genuine, love that feels peaceful, and happiness that does not depend on everything going perfectly. I hope you get opportunities that surprise you, adventures that become legendary stories, and memories that you will still be talking about years from now.</p>
+
+    <p>And when life gets confusing, I hope you remember that you do not have to have everything figured out immediately. Nobody does. It is okay to take your time. It is okay to change your mind. It is okay to make mistakes. What matters is that you keep going and remain true to yourself. I will always be cheering for you in my own way, and I hope this friendship gives you at least a small reminder that you are never walking through life completely alone.</p>
+
+    <p>Thank you, Dev, for being there through more than a decade of life. Thank you for the memories I can never replace. Thank you for being someone I can call my best friend. We may joke around most of the time and probably won't suddenly become emotional philosophers after reading this, but I mean every word here. Some people become part of your life for a season. Some stay for a chapter. And some become part of the story itself. <span class="highlight">You are part of mine.</span></p>
+
+    <p>So today, forget the stress for a while. Smile more. Laugh louder. Eat something ridiculously good. Take pictures. Make memories. Celebrate how far you have come and get excited about where you are going. This birthday is not just another number. It is another milestone in a life that still has so many pages left to write.</p>
+
+    <p>Here is to another year of adventures, chaos, inside jokes, unexpected victories, lessons, late-night conversations, ridiculous ideas, and moments that we will probably bring up years later and laugh about all over again. And if the next ten years are even half as memorable as the last ten, I already know we are going to have some incredible stories.</p>
+
+    <p><strong>Happy Birthday, Dev.</strong> May this year bring you closer to everything you dream about. May you stay healthy, peaceful, confident, and surrounded by people who genuinely care about you. Never forget how far you have come, and never underestimate how much more you can achieve. Keep your smile, protect your peace, follow your dreams, and never lose that part of you that makes you, you.</p>
+
+    <p>Most importantly, thank you for being my friend for all these years. Ten-plus years down, and hopefully many, many more to go. Whatever happens in the future, I will always be grateful that somewhere along the way, our paths crossed and a friendship began that became such an important part of my life.</p>
+
+    <p>Today is your birthday, Dev. So let the world be a little brighter, let the music be a little louder, let the cake be a little bigger, and let yourself feel proud of the person you are. You deserve a beautiful day — and an even more beautiful year ahead.</p>
+
+    <div class="signature">With lots of love & friendship,<br>Your Best Friend ❤️</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section>
+ <div class="container">
+  <div class="section-tag">Birthday Wishes</div>
+  <h2 class="section-title">A Few Things I <span>Wish For You</span></h2>
+  <div class="wishes">
+   <div class="wish reveal"><b>🌟 Big Dreams</b>May you have the courage to dream bigger than your doubts.</div>
+   <div class="wish reveal"><b>❤️ Real Happiness</b>May your happiest moments come from things money can never buy.</div>
+   <div class="wish reveal"><b>🚀 Success</b>May your hard work open doors you once thought were impossible.</div>
+   <div class="wish reveal"><b>🕊️ Peace</b>May you find calm even when life becomes loud and complicated.</div>
+   <div class="wish reveal"><b>😂 Endless Laughter</b>May you always have people around who can make you laugh until it hurts.</div>
+   <div class="wish reveal"><b>🌈 Beautiful Memories</b>May this year give you stories you will love telling for years.</div>
+  </div>
+ </div>
+</section>
+
+<section class="final">
+ <div class="final-box">
+  <div class="big-heart">❤️</div>
+  <h2>Happy Birthday, Dev!</h2>
+  <p>More than 10 years of friendship. Countless memories. One incredible person. Here's to the next chapter. ✨</p>
+  <div class="cta-row">
+   <button class="btn btn-main" id="celebrateBtn">Celebrate! 🎉</button>
+   <a class="btn btn-ghost" href="#story">Read It Again ↺</a>
+  </div>
+ </div>
+</section>
+
+<div class="footer">Made especially for Dev • A friendship worth celebrating • 🎂❤️</div>
+
+<script>
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Loader */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 1200);
+});
+
+/* Canvas stars */
+const starCanvas = document.getElementById('stars');
+const starCtx = starCanvas.getContext('2d');
+let stars = [];
+function resizeCanvas(){
+  starCanvas.width = innerWidth * devicePixelRatio;
+  starCanvas.height = innerHeight * devicePixelRatio;
+  starCanvas.style.width = innerWidth+'px';
+  starCanvas.style.height = innerHeight+'px';
+  starCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+function initStars(){
+  stars = Array.from({length: Math.min(150, Math.floor(innerWidth/8))}, () => ({
+    x: Math.random()*innerWidth,y:Math.random()*innerHeight,
+    r:Math.random()*1.5+.2,a:Math.random()*.8+.1,s:Math.random()*.012+.002
+  }));
+}
+function drawStars(){
+  starCtx.clearRect(0,0,innerWidth,innerHeight);
+  stars.forEach(s=>{
+    s.a += s.s;
+    const alpha=.25+Math.abs(Math.sin(s.a))*.75;
+    starCtx.beginPath(); starCtx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    starCtx.fillStyle=`rgba(255,255,255,${alpha})`; starCtx.fill();
+  });
+  if(!reduceMotion) requestAnimationFrame(drawStars);
+}
+resizeCanvas();initStars();drawStars();
+addEventListener('resize',()=>{resizeCanvas();initStars()});
+
+/* Background particles */
+const pc = document.getElementById('particles'), pctx=pc.getContext('2d');
+let pts=[];
+function resizeP(){pc.width=innerWidth;pc.height=innerHeight}
+function initP(){pts=Array.from({length:45},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*2+0.5,dx:(Math.random()-.5)*.25,dy:(Math.random()-.5)*.25}))}
+function drawP(){
+ pctx.clearRect(0,0,innerWidth,innerHeight);
+ pts.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>innerWidth)p.dx*=-1;if(p.y<0||p.y>innerHeight)p.dy*=-1;
+ pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fillStyle='rgba(255,170,220,.3)';pctx.fill()});
+ if(!reduceMotion)requestAnimationFrame(drawP);
+}
+resizeP();initP();drawP();addEventListener('resize',()=>{resizeP();initP()});
+
+/* Reveal on scroll */
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+/* Floating hearts */
+function floatingHeart(){
+ if(reduceMotion)return;
+ const h=document.createElement('div');h.className='float-heart';
+ h.textContent=['❤️','💗','💖','✨','💕'][Math.floor(Math.random()*5)];
+ h.style.left=Math.random()*100+'vw';
+ h.style.setProperty('--drift',(Math.random()*160-80)+'px');
+ h.style.animationDuration=(6+Math.random()*6)+'s';
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),13000);
+}
+setInterval(floatingHeart,1300);
+
+/* Confetti */
+function confetti(){
+ const box=document.getElementById('burst');
+ for(let i=0;i<140;i++){
+   const c=document.createElement('i');c.className='confetti';
+   c.style.left=Math.random()*100+'vw';
+   c.style.background=`hsl(${Math.random()*360},90%,70%)`;
+   c.style.animationDuration=(2.4+Math.random()*3)+'s';
+   c.style.animationDelay=Math.random()*.6+'s';
+   c.style.transform=`rotate(${Math.random()*360}deg)`;
+   box.appendChild(c);
+   setTimeout(()=>c.remove(),6000);
+ }
+}
+function toast(msg){
+ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+ setTimeout(()=>t.classList.remove('show'),2800);
+}
+document.getElementById('surpriseBtn').addEventListener('click',()=>{
+ confetti();toast('SURPRISE! 🎉 Dev, this whole page is for you! ❤️');
+});
+document.getElementById('celebrateBtn').addEventListener('click',()=>{
+ confetti();toast('Happy Birthday, Dev! Here is to many more years! 🥳❤️');
+});
+
+/* Tiny click sparkle effect */
+document.addEventListener('click',e=>{
+ if(reduceMotion)return;
+ const s=document.createElement('span');
+ s.textContent='✦';s.style.position='fixed';s.style.left=e.clientX+'px';s.style.top=e.clientY+'px';
+ s.style.pointerEvents='none';s.style.zIndex=90;s.style.color='#ffd0e8';s.style.fontSize='18px';
+ s.style.animation='rise 1s ease forwards';document.body.appendChild(s);setTimeout(()=>s.remove(),1000);
+});
+
+/* Optional lightweight Web Audio birthday ambience: starts only after user clicks */
+let audioCtx=null, playing=false, timer=null;
+const musicBtn=document.getElementById('musicBtn');
+function playTone(freq,duration,start){
+ if(!audioCtx)return;
+ const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.type='sine';o.frequency.value=freq;
+ g.gain.setValueAtTime(0,audioCtx.currentTime+start);
+ g.gain.linearRampToValueAtTime(.035,audioCtx.currentTime+start+.03);
+ g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+start+duration);
+ o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+start);o.stop(audioCtx.currentTime+start+duration+.05);
+}
+function melody(){
+ if(!playing)return;
+ [523.25,659.25,783.99,659.25,698.46,880,1046.5,880].forEach((f,i)=>playTone(f,.38,i*.24));
+ timer=setTimeout(melody,2100);
+}
+musicBtn.addEventListener('click',()=>{
+ if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ if(playing){playing=false;clearTimeout(timer);musicBtn.textContent='♪';toast('Music paused');}
+ else{playing=true;musicBtn.textContent='♫';melody();toast('A tiny birthday melody for Dev 🎶');}
+});
+</script>
+</body>
+</html>
+'''
+
+path = Path("/mnt/data/dev_birthday_website.html")
+path.write_text(html, encoding="utf-8")
+print(f"Created: {path}")
+print(f"Size: {path.stat().st_size:,} bytes")
